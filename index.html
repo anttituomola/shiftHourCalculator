@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hour Counter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Started</h2>
+    <input id="startHourEl" type="datetime-local" value="2021-08-01T12:00" />
+    <h2>Ended</h2>
+    <input id="endHourEl" type="datetime-local" value="2021-08-01T15:00"/>
+    <button id="submitButton" onclick="calculateHours()">Submit</button>
+    <h3>This shift hours:</h3>
+    <div id="calculation"></div>
+    <h3>All hours total:</h3>
+    <div id="calculationTotal"></div>
+    <h2>Reported shifts</h2>
+    <div id="shift-list"></div>
+    <script src="index.js"></script>
+</body>
+</html>
