@@ -64,7 +64,7 @@ function render() {
     for (let i = 0; i < shifts.length; i++) {
         hours += shifts[i].hoursTotal
     }
-    totalHoursEl.textContent = hours / (1000 * 60 * 60)
+    totalHoursEl.textContent = Math.round(hours / (1000 * 60 * 60)*100) / 100
 }
 
 //Listen for input fields
