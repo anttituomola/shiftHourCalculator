@@ -1,5 +1,6 @@
 let shifts = []
 let hours = 0
+let eveningHours = 0
 
 let startDateValue = new Date(document.getElementById("startHourEl").value)
 
@@ -20,6 +21,7 @@ function calculateHours() {
     getValues()
     let thisDate = startDate
     if (shifts.length === 0) {
+        countEveningHours()
         updateHours()
     } else {
         let found = false
@@ -31,13 +33,31 @@ function calculateHours() {
             }
         }
         if (!found) {
+            countEveningHours()
             updateHours()
         }
     }
 }
 
+function countEveningHours() {
+    //This works for hours, but how can we count minutes also?
+    //The idea is that hours between 18 and 24 are paid more so we need a count of them
+    eveningStarts = 18
+    let startEveningHours = new Date(document.getElementById("startHourEl").value).getHours()
+    let endEveningHours = new Date(document.getElementById("endHourEl").value).getHours()
+    if(startEveningHours >= eveningStarts || endEveningHours >= eveningStarts) {
+        if(startEveningHours > eveningStarts) {
+            eveningHours = endEveningHours - startEveningHours
+        } else {
+            eveningHours = endEveningHours - eveningStarts
+        }
+    }
+
+}
+
 function updateHours() {
-    shifts.push({ startDate, renderHours, hoursTotal })
+    countEveningHours()
+    shifts.push({ startDate, renderHours, hoursTotal, startHour, endHour, eveningHours })
     /* how to set the date selector for the next day?
     nextDay = startDateValue.getDate() + 1
     startDateValue.setDate(nextDay) */
@@ -53,10 +73,11 @@ function render() {
     let shiftList = document.getElementById("shift-list")
     let totalHoursEl = document.getElementById("calculationTotal")
     shiftList.textContent = ""
+    //TODO: filter with date
     for (let i = 0; i < shifts.length; i++) {
         shiftList.innerHTML += `
         <div class="aShitf">
-        ${shifts[i].startDate}: ${shifts[i].renderHours}
+        ${shifts[i].startDate}: ${shifts[i].renderHours} (${shifts[i].eveningHours} evening hours)
         <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
     }
     //Update total hours count
@@ -64,7 +85,12 @@ function render() {
     for (let i = 0; i < shifts.length; i++) {
         hours += shifts[i].hoursTotal
     }
-    totalHoursEl.textContent = Math.round(hours / (1000 * 60 * 60)*100) / 100
+    eveningHours = 0
+    for (let i=0;i<shifts.length;i++) {
+        eveningHours += shifts[i].eveningHours
+    }
+
+    totalHoursEl.textContent = Math.round(hours / (1000 * 60 * 60)*100) / 100 + " h (" + eveningHours + " evening hours)"
 }
 
 //Listen for input fields
