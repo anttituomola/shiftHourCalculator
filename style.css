@@ -1,0 +1,59 @@
+body {
+    font-family: garamond, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.column {
+    max-width: 600px;
+    padding: 2em;
+    margin-top: 1em;
+}
+
+.leftColumn {
+    border-right: 1px solid black;
+}
+
+.button {
+    margin-top: 1em;
+    color: cornsilk;
+    border-radius: 2px;
+}
+
+.submitButton {
+    display: block;
+    background-color: rgb(59, 92, 27);
+    border: 1px green solid;
+    padding: 1em;
+    width: 80%;
+}
+
+.submitButton:hover {
+    background-color:green;
+    cursor: pointer;
+    border: 1px transparent solid;
+}
+
+.deleteButton {
+    display: inline;
+    background-color: tomato;
+    color: grey;
+    border: 0;
+    padding: 0.25em;
+    margin-left: 1em;
+}
+
+.deleteButton:hover {
+    background-color: brown;
+    cursor: pointer;
+    color: black;
+}
+
+.aShitf {
+    padding: 0.25em;
+}

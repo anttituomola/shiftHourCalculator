@@ -57,22 +57,32 @@ function render() {
         shiftList.innerHTML += `
         <div class="aShitf">
         ${shifts[i].startDate}: ${shifts[i].renderHours}
-        <button class="deleteButton" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
+        <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
     }
+    //Update total hours count
     hours = 0
-    for(let i=0;i<shifts.length;i++) {
+    for (let i = 0; i < shifts.length; i++) {
         hours += shifts[i].hoursTotal
     }
     totalHoursEl.textContent = hours / (1000 * 60 * 60)
 }
 
-document.getElementById("endHourEl").addEventListener("input", () => {
+//Listen for input fields
+let endHourEl = document.getElementById("endHourEl")
+endHourEl.addEventListener("input", () => {
     getValues()
     document.getElementById("calculation").textContent = renderHours
 })
 document.getElementById("startHourEl").addEventListener("input", () => {
     getValues()
     document.getElementById("calculation").textContent = renderHours
+})
+
+//listen for enter {
+endHourEl.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        calculateHours()
+    }
 })
 
 
