@@ -17,13 +17,8 @@ function getValues() {
 }
 
 function calculateHours() {
-    //This function is terrible with all the nested conditionals. How can we make it better?
     getValues()
     let thisDate = startDate
-    if (shifts.length === 0) {
-        countEveningHours()
-        updateHours()
-    } else {
         let found = false
         for (let i = 0; i < shifts.length; i++) {
             if (shifts[i].startDate === thisDate) {
@@ -32,12 +27,12 @@ function calculateHours() {
                 break
             }
         }
-        if (!found) {
+        if (shifts.length === 0 || (!found)) {
             countEveningHours()
             updateHours()
         }
     }
-}
+
 
 function countEveningHours() {
     //This works for hours, but how can we count minutes also?
