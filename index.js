@@ -1,7 +1,10 @@
 let shifts = []
-let hours  = 0
+let hours = 0
+
+let startDateValue = new Date(document.getElementById("startHourEl").value)
 
 function getValues() {
+    //is this the best way to get global variables that get the lates data from input? Or should we use an even data somehow?
     window.startHour = new Date(document.getElementById("startHourEl").value).getTime()
     window.endHour = new Date(document.getElementById("endHourEl").value).getTime()
     window.startDay = new Date(startHour).getDate()
@@ -13,11 +16,11 @@ function getValues() {
 }
 
 function calculateHours() {
+    //This function is terrible with all the nested conditionals. How can we make it better?
     getValues()
     let thisDate = startDate
     if (shifts.length === 0) {
-        shifts.push({ startDate, renderHours })
-        render()
+        updateHours()
     } else {
         let found = false
         for (let i = 0; i < shifts.length; i++) {
@@ -28,19 +31,27 @@ function calculateHours() {
             }
         }
         if (!found) {
-            shifts.push({ startDate, renderHours })
-            render()
+            updateHours()
         }
     }
 }
 
+function updateHours() {
+    shifts.push({ startDate, renderHours, hoursTotal })
+    /* how to set the date selector for the next day?
+    nextDay = startDateValue.getDate() + 1
+    startDateValue.setDate(nextDay) */
+    render()
+}
+
 function deleteButtonHandler(i) {
-    shifts.splice(i,1)
+    shifts.splice(i, 1)
     render()
 }
 
 function render() {
     let shiftList = document.getElementById("shift-list")
+    let totalHoursEl = document.getElementById("calculationTotal")
     shiftList.textContent = ""
     for (let i = 0; i < shifts.length; i++) {
         shiftList.innerHTML += `
@@ -48,13 +59,18 @@ function render() {
         ${shifts[i].startDate}: ${shifts[i].renderHours}
         <button class="deleteButton" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
     }
+    hours = 0
+    for(let i=0;i<shifts.length;i++) {
+        hours += shifts[i].hoursTotal
+    }
+    totalHoursEl.textContent = hours / (1000 * 60 * 60)
 }
 
-document.getElementById("endHourEl").addEventListener("blur", () => {
+document.getElementById("endHourEl").addEventListener("input", () => {
     getValues()
     document.getElementById("calculation").textContent = renderHours
 })
-document.getElementById("startHourEl").addEventListener("blur", () => {
+document.getElementById("startHourEl").addEventListener("input", () => {
     getValues()
     document.getElementById("calculation").textContent = renderHours
 })
