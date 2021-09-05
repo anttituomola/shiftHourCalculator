@@ -15,7 +15,11 @@ function getValues() {
     window.hoursTotal = endHour - startHour
     window.renderHours = Math.floor(hoursTotal / (1000 * 60 * 60)) + "h " + Math.floor(hoursTotal / (1000 * 60)) % 60 + "m"
     window.renderEveningHours = Math.floor(eveningHours / (1000 * 60 * 60)) + "h" + Math.floor(eveningHours / (1000 * 60)) % 60 + "min"
+    window.sortedShifts = shifts.sort((a,b) => b.startHour - a.startHour)
+
 }
+
+//TODO: change input fields so, that you only have one for date and two for times!
 
 function calculateHours() {
     getValues()
@@ -76,11 +80,10 @@ function render() {
     let shiftList = document.getElementById("shift-list")
     let totalHoursEl = document.getElementById("calculationTotal")
     shiftList.textContent = ""
-    //TODO: filter with date
-    for (let i = 0; i < shifts.length; i++) {
+    for (let i = 0; i < sortedShifts.length; i++) {
         shiftList.innerHTML += `
         <div class="aShitf">
-        ${shifts[i].startDate}: ${shifts[i].renderHours} (${shifts[i].renderEveningHours} evening hours)
+        ${sortedShifts[i].startDate}: ${sortedShifts[i].renderHours} (${sortedShifts[i].renderEveningHours} evening hours)
         <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
     }
     //Update total hours count
