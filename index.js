@@ -14,48 +14,56 @@ function getValues() {
     window.startDate = startDay + "." + startMonth + "." + startYear
     window.hoursTotal = endHour - startHour
     window.renderHours = Math.floor(hoursTotal / (1000 * 60 * 60)) + "h " + Math.floor(hoursTotal / (1000 * 60)) % 60 + "m"
+    window.renderEveningHours = Math.floor(eveningHours / (1000 * 60 * 60)) + "h" + Math.floor(eveningHours / (1000 * 60)) % 60 + "min"
 }
 
 function calculateHours() {
     getValues()
     let thisDate = startDate
-        let found = false
-        for (let i = 0; i < shifts.length; i++) {
-            if (shifts[i].startDate === thisDate) {
-                found = true
-                alert("This date already submitted!")
-                break
-            }
-        }
-        if (shifts.length === 0 || (!found)) {
-            countEveningHours()
-            updateHours()
+    let found = false
+    for (let i = 0; i < shifts.length; i++) {
+        if (shifts[i].startDate === thisDate) {
+            found = true
+            alert("This date already submitted!")
+            break
         }
     }
+    if (shifts.length === 0 || (!found)) {
+        countEveningHours()
+        updateHours()
+    }
+}
 
 
 function countEveningHours() {
-    //This works for hours, but how can we count minutes also?
-    //The idea is that hours between 18 and 24 are paid more so we need a count of them
-    eveningStarts = 18
+    getValues()
+    eveningStarts = new Date(startHour)
+    eveningStarts.setHours(18)
+    eveningS = 18
     let startEveningHours = new Date(document.getElementById("startHourEl").value).getHours()
     let endEveningHours = new Date(document.getElementById("endHourEl").value).getHours()
-    if(startEveningHours >= eveningStarts || endEveningHours >= eveningStarts) {
-        if(startEveningHours > eveningStarts) {
-            eveningHours = endEveningHours - startEveningHours
+    if (startEveningHours >= eveningS || endEveningHours >= eveningS) {
+        if (startEveningHours > eveningS) {
+            eveningHours = endHour - startHour
         } else {
-            eveningHours = endEveningHours - eveningStarts
+            eveningMilliseconds = eveningStarts.getTime()
+            eveningHours = endHour - eveningMilliseconds
         }
     }
-
 }
 
 function updateHours() {
     countEveningHours()
-    shifts.push({ startDate, renderHours, hoursTotal, startHour, endHour, eveningHours })
-    /* how to set the date selector for the next day?
-    nextDay = startDateValue.getDate() + 1
-    startDateValue.setDate(nextDay) */
+    shifts.push({ startDate, renderHours, hoursTotal, startHour, endHour, eveningHours, renderEveningHours })
+
+    //how to set the date selector for the next day?
+    /* let today = new Date(startDateValue)
+    console.log(today)
+    let tomorrow = new Date(today.setDate(today.getDate() +1 ))
+    let newDate = document.getElementById("startHourEl")
+    newDate.value = tomorrow.toLocaleString("fi-FI", options)
+    console.log(tomorrow.toLocaleString()) */
+
     render()
 }
 
@@ -72,7 +80,7 @@ function render() {
     for (let i = 0; i < shifts.length; i++) {
         shiftList.innerHTML += `
         <div class="aShitf">
-        ${shifts[i].startDate}: ${shifts[i].renderHours} (${shifts[i].eveningHours} evening hours)
+        ${shifts[i].startDate}: ${shifts[i].renderHours} (${shifts[i].renderEveningHours} evening hours)
         <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
     }
     //Update total hours count
@@ -81,11 +89,11 @@ function render() {
         hours += shifts[i].hoursTotal
     }
     eveningHours = 0
-    for (let i=0;i<shifts.length;i++) {
+    for (let i = 0; i < shifts.length; i++) {
         eveningHours += shifts[i].eveningHours
     }
 
-    totalHoursEl.textContent = Math.round(hours / (1000 * 60 * 60)*100) / 100 + " h (" + eveningHours + " evening hours)"
+    totalHoursEl.textContent = Math.round(hours / (1000 * 60 * 60) * 100) / 100 + " h (" + Math.round(eveningHours / (1000 * 60 * 60) * 100) / 100 + " evening hours)"
 }
 
 //Listen for input fields
