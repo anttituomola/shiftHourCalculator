@@ -117,4 +117,4 @@ endHourEl.addEventListener("keypress", (event) => {
     }
 })
 
-
+//There's plenty of stuff in this single JS file. Should we break it down to pieces like we did with React applications? How do we do that with JS?
