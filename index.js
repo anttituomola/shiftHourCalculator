@@ -12,6 +12,7 @@ let startDateValue = new Date(document.getElementById("startHourEl").value)
 //TODO: change input fields so, that you only have one for date and two for times!
 //as this will be a major change to the structure of the app, what's the best way to do it?
 
+//yet another comment
 
 class Shift {
     startDate = null;
