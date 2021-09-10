@@ -1,23 +1,21 @@
-
 let shifts = []
 let hours = 0
 let eveningHours = 0
 
-document.getElementById("startDateEl").value = dayjs().format("YYYY-MM-DD") //why does this shows in local format on the app (DD/MM/YYYY)
-let startDate = document.getElementById("startDateEl").value
-document.getElementById("startHourEl").value = dayjs(startDate).hour(16).minute(00).format("HH:mm") //why I can't set the value using variable name, like startDate = dayjs()...etc
-let startHour = document.getElementById("startHourEl").value
-let originalTime = dayjs(startDate).hour(16).minute(00)
-let endHour = dayjs(originalTime).add(8, "h")
-console.log(addedTime)
-document.getElementById("endHourEl").value = dayjs(startDate).hour(18).format("HH:mm")
-let endHour = document.getElementById("endHourEl").value
+//global variables
+let startDate = dayjs().hour(00).minute(00).format() 
+let startHour = dayjs(startDate).add(11, "h")
+let endHour = dayjs(startHour).add(8, "h")
+
+//input field placeholder values
+document.getElementById("startDateEl").value = dayjs(startDate).format("YYYY-MM-DD") //why does this shows in local format on the app (DD/MM/YYYY)
+document.getElementById("startHourEl").value = dayjs(startHour).format("HH:mm")
+document.getElementById("endHourEl").value = dayjs(endHour).format("HH:mm")
 
 
 function getValues() {
     //is this the best way to get global variables that get the lates data from input? Or should we use an even data somehow?
 
-    window.startDate = startDay + "." + startMonth + "." + startYear
     window.hoursTotal = endHour - startHour
     window.renderHours = Math.floor(hoursTotal / (1000 * 60 * 60)) + "h " + Math.floor(hoursTotal / (1000 * 60)) % 60 + "m"
     window.renderEveningHours = Math.floor(eveningHours / (1000 * 60 * 60)) + "h" + Math.floor(eveningHours / (1000 * 60)) % 60 + "min"
@@ -67,14 +65,6 @@ function countEveningHours() {
 function updateHours() {
     countEveningHours()
     shifts.push({ startDate, renderHours, hoursTotal, startHour, endHour, eveningHours, renderEveningHours })
-
-    //how to set the date selector for the next day?
-    /* let today = new Date(startDateValue)
-    console.log(today)
-    let tomorrow = new Date(today.setDate(today.getDate() +1 ))
-    let newDate = document.getElementById("startHourEl")
-    newDate.value = tomorrow.toLocaleString("fi-FI", options)
-    console.log(tomorrow.toLocaleString()) */
 
     render()
 }
