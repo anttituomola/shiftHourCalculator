@@ -1,16 +1,22 @@
+
 let shifts = []
 let hours = 0
 let eveningHours = 0
 
-let startDateValue = new Date(document.getElementById("startHourEl").value)
+document.getElementById("startDateEl").value = dayjs().format("YYYY-MM-DD") //why does this shows in local format on the app (DD/MM/YYYY)
+let startDate = document.getElementById("startDateEl").value
+document.getElementById("startHourEl").value = dayjs(startDate).hour(16).minute(00).format("HH:mm") //why I can't set the value using variable name, like startDate = dayjs()...etc
+let startHour = document.getElementById("startHourEl").value
+let originalTime = dayjs(startDate).hour(16).minute(00)
+let endHour = dayjs(originalTime).add(8, "h")
+console.log(addedTime)
+document.getElementById("endHourEl").value = dayjs(startDate).hour(18).format("HH:mm")
+let endHour = document.getElementById("endHourEl").value
+
 
 function getValues() {
     //is this the best way to get global variables that get the lates data from input? Or should we use an even data somehow?
-    window.startHour = new Date(document.getElementById("startHourEl").value).getTime()
-    window.endHour = new Date(document.getElementById("endHourEl").value).getTime()
-    window.startDay = new Date(startHour).getDate()
-    window.startMonth = new Date(startHour).getMonth() + 1
-    window.startYear = new Date(startHour).getFullYear()
+
     window.startDate = startDay + "." + startMonth + "." + startYear
     window.hoursTotal = endHour - startHour
     window.renderHours = Math.floor(hoursTotal / (1000 * 60 * 60)) + "h " + Math.floor(hoursTotal / (1000 * 60)) % 60 + "m"
@@ -36,6 +42,8 @@ function calculateHours() {
         countEveningHours()
         updateHours()
     }
+
+
 }
 
 
@@ -100,7 +108,6 @@ function render() {
 }
 
 //Listen for input fields
-let endHourEl = document.getElementById("endHourEl")
 endHourEl.addEventListener("input", () => {
     getValues()
     document.getElementById("calculation").textContent = renderHours

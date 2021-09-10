@@ -13,10 +13,12 @@
     <div class="container">
         <div class="column leftColumn">
             <h1>Type in your shift!</h1>
+            <h2>Date</h2>
+            <input id="startDateEl" type="date">
             <h2>Started</h2>
-            <input id="startHourEl" type="datetime-local" value="2021-08-01T12:00" />
+            <input id="startHourEl" type="time">
             <h2>Ended</h2>
-            <input id="endHourEl" type="datetime-local" value="2021-08-01T15:00" />
+            <input id="endHourEl" type="time">
             <button id="submitButton" class="button submitButton" onclick="calculateHours()">Submit</button>
             <h3>This shift hours:</h3>
             <div id="calculation"></div>
@@ -28,7 +30,7 @@
                 <div id="shift-list"></div>
         </div>
     </div>
-
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
     <script src="index.js"></script>
 </body>
 

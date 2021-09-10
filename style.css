@@ -58,6 +58,9 @@ body {
     padding: 0.25em;
 }
 
+#startDateEl {
+    display: block;
+}
 @media (max-width: 600px) {
     .container {
         flex-direction: column;
