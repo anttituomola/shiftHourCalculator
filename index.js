@@ -6,6 +6,10 @@ let eveningHours = 0
 let startDate = dayjs().hour(00).minute(00).format() 
 let startHour = dayjs(startDate).add(11, "h")
 let endHour = dayjs(startHour).add(8, "h")
+let hoursTotal = endHour - startHour
+let renderHours = Math.floor(hoursTotal / (1000 * 60 * 60)) + "h " + Math.floor(hoursTotal / (1000 * 60)) % 60 + "m"
+let renderEveningHours = Math.floor(eveningHours / (1000 * 60 * 60)) + "h" + Math.floor(eveningHours / (1000 * 60)) % 60 + "min"
+let sortedShifts = shifts.sort((a,b) => b.startHour - a.startHour)
 
 //input field placeholder values
 document.getElementById("startDateEl").value = dayjs(startDate).format("YYYY-MM-DD") //why does this shows in local format on the app (DD/MM/YYYY)
@@ -16,10 +20,8 @@ document.getElementById("endHourEl").value = dayjs(endHour).format("HH:mm")
 function getValues() {
     //is this the best way to get global variables that get the lates data from input? Or should we use an even data somehow?
 
-    window.hoursTotal = endHour - startHour
-    window.renderHours = Math.floor(hoursTotal / (1000 * 60 * 60)) + "h " + Math.floor(hoursTotal / (1000 * 60)) % 60 + "m"
-    window.renderEveningHours = Math.floor(eveningHours / (1000 * 60 * 60)) + "h" + Math.floor(eveningHours / (1000 * 60)) % 60 + "min"
-    window.sortedShifts = shifts.sort((a,b) => b.startHour - a.startHour)
+   // window.hoursTotal = endHour - startHour
+
 
 }
 
@@ -114,4 +116,3 @@ endHourEl.addEventListener("keypress", (event) => {
     }
 })
 
-//There's plenty of stuff in this single JS file. Should we break it down to pieces like we did with React applications? How do we do that with JS?
