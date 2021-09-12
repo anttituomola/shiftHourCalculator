@@ -40,8 +40,8 @@ function calculateHours() {
         countEveningHours()
         updateHours()
     }
-
-
+    startDate = dayjs(startDate).add(1, "d")
+    document.getElementById("startDateEl").value = dayjs(startDate).add(1, "d").format("YYYY-MM-DD")
 }
 
 
