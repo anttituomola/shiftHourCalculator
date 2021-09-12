@@ -1,3 +1,4 @@
+
 let shifts = []
 let hours = 0
 let eveningHours = 0
@@ -27,7 +28,7 @@ function getValues() {
 
 function calculateHours() {
     getValues()
-    let thisDate = startDate
+    let thisDate = dayjs(startDate).format()
     let found = false
     for (let i = 0; i < shifts.length; i++) {
         if (shifts[i].startDate === thisDate) {
@@ -40,8 +41,8 @@ function calculateHours() {
         countEveningHours()
         updateHours()
     }
-
-
+    document.getElementById("startDateEl").value = dayjs(startDate).add(1, "d").format("YYYY-MM-DD")
+    startDate = dayjs(startDate).add(1, "d")
 }
 
 
