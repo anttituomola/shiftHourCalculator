@@ -1,4 +1,4 @@
-
+dayjs.extend(window.dayjs_plugin_weekday)
 dayjs.extend(window.dayjs_plugin_dayOfYear)
 
 let shifts = []
@@ -63,6 +63,7 @@ function countEveningHours() {
 
 function updateHours() {
     countEveningHours()
+    //fix this: remove formatting from class element
     let todoEl = new Todo(startDate.format("DD.MM.YYYY"), startHour, endHour, shiftHour, shiftEveningHour)
     shifts.push(todoEl)
     sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
@@ -89,6 +90,7 @@ function render() {
     let totalHoursEl = document.getElementById("calculationTotal")
     shiftList.textContent = ""
     for (let i = 0; i < sortedShifts.length; i++) {
+        //TODO: add weekday
         shiftList.innerHTML += `
         <div class="aShitf">
         ${sortedShifts[i].startDate}: ${(Math.round(sortedShifts[i].shiftHour * 100) / 100).toFixed(2)} h (${(Math.round(sortedShifts[i].shiftEveningHour * 100) / 100).toFixed(2)} evening hours)
