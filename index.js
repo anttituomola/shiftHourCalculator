@@ -1,12 +1,19 @@
 
+dayjs.extend(window.dayjs_plugin_dayOfYear)
+
 let shifts = []
 let hours = 0
 let eveningHours = 0
+let shiftEveningHours = 0
 
 //global variables
-let startDate = dayjs().hour(00).minute(00).format() 
-let startHour = dayjs(startDate).add(11, "h")
-let endHour = dayjs(startHour).add(8, "h")
+let startDate = dayjs().hour(00).minute(00).format()
+let startHour = dayjs(startDate).hour(12).minute(00)
+let endHour = dayjs(startDate).hour(19).minute(30)
+let shiftHour = 0
+let button = document.getElementById("submitButton")
+let sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
+
 
 //input field placeholder values
 document.getElementById("startDateEl").value = dayjs(startDate).format("YYYY-MM-DD") //why does this shows in local format on the app (DD/MM/YYYY)
@@ -15,20 +22,21 @@ document.getElementById("endHourEl").value = dayjs(endHour).format("HH:mm")
 
 
 function getValues() {
-    //is this the best way to get global variables that get the lates data from input? Or should we use an even data somehow?
-
-    window.hoursTotal = endHour - startHour
-    window.renderHours = Math.floor(hoursTotal / (1000 * 60 * 60)) + "h " + Math.floor(hoursTotal / (1000 * 60)) % 60 + "m"
-    window.renderEveningHours = Math.floor(eveningHours / (1000 * 60 * 60)) + "h" + Math.floor(eveningHours / (1000 * 60)) % 60 + "min"
-    window.sortedShifts = shifts.sort((a,b) => b.startHour - a.startHour)
-
+    let startHourValue = document.getElementById("startHourEl").value
+    startHourValue = startHourValue.split(":")
+    let endHourValue = document.getElementById("endHourEl").value
+    endHourValue = endHourValue.split(":")
+    startDate = dayjs(document.getElementById("startDateEl").value)
+    startHour = dayjs(startDate).hour(startHourValue[0]).minute(startHourValue[1])
+    endHour = dayjs(startDate).hour(endHourValue[0]).minute(endHourValue[1])
+    shiftHour = dayjs(endHour).diff(startHour, "h", true)
+    document.getElementById("calculation").textContent = (Math.round(shiftHour * 100) / 100).toFixed(2)
 }
 
-//TODO: change input fields so, that you only have one for date and two for times!
-
-function calculateHours() {
+//check if date already submitted
+function checkDate() {
     getValues()
-    let thisDate = dayjs(startDate).format()
+    let thisDate = dayjs(startDate).format("DD.MM.YYYY")
     let found = false
     for (let i = 0; i < shifts.length; i++) {
         if (shifts[i].startDate === thisDate) {
@@ -38,35 +46,36 @@ function calculateHours() {
         }
     }
     if (shifts.length === 0 || (!found)) {
-        countEveningHours()
         updateHours()
     }
-    document.getElementById("startDateEl").value = dayjs(startDate).add(1, "d").format("YYYY-MM-DD")
-    startDate = dayjs(startDate).add(1, "d")
+    console.log(shifts)
 }
 
-
 function countEveningHours() {
-    getValues()
-    eveningStarts = new Date(startHour)
-    eveningStarts.setHours(18)
-    eveningS = 18
-    let startEveningHours = new Date(document.getElementById("startHourEl").value).getHours()
-    let endEveningHours = new Date(document.getElementById("endHourEl").value).getHours()
-    if (startEveningHours >= eveningS || endEveningHours >= eveningS) {
-        if (startEveningHours > eveningS) {
-            eveningHours = endHour - startHour
-        } else {
-            eveningMilliseconds = eveningStarts.getTime()
-            eveningHours = endHour - eveningMilliseconds
-        }
+    let eveningStarts = dayjs(startDate).hour(18)
+    if (dayjs(startHour).isAfter(eveningStarts)) {
+        shiftEveningHour = endHour.diff(startHour, "hour", true)
+    }
+    else {
+        shiftEveningHour = endHour.diff(eveningStarts, "hour", true)
     }
 }
 
 function updateHours() {
     countEveningHours()
-    shifts.push({ startDate, renderHours, hoursTotal, startHour, endHour, eveningHours, renderEveningHours })
+    let todoEl = new Todo(startDate.format("DD.MM.YYYY"), startHour, endHour, shiftHour, shiftEveningHour)
+    shifts.push(todoEl)
+    sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
 
+    //Update total hours count
+    hours = 0
+    for (let i = 0; i < shifts.length; i++) {
+        hours += shifts[i].shiftHour
+    }
+    eveningHours = 0
+    for (let i = 0; i < shifts.length; i++) {
+        eveningHours += shifts[i].shiftEveningHour
+    }
     render()
 }
 
@@ -82,37 +91,33 @@ function render() {
     for (let i = 0; i < sortedShifts.length; i++) {
         shiftList.innerHTML += `
         <div class="aShitf">
-        ${sortedShifts[i].startDate}: ${sortedShifts[i].renderHours} (${sortedShifts[i].renderEveningHours} evening hours)
+        ${sortedShifts[i].startDate}: ${(Math.round(sortedShifts[i].shiftHour * 100) / 100).toFixed(2)} h (${(Math.round(sortedShifts[i].shiftEveningHour * 100) / 100).toFixed(2)} evening hours)
         <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
     }
-    //Update total hours count
-    hours = 0
-    for (let i = 0; i < shifts.length; i++) {
-        hours += shifts[i].hoursTotal
-    }
-    eveningHours = 0
-    for (let i = 0; i < shifts.length; i++) {
-        eveningHours += shifts[i].eveningHours
-    }
+    //update date selector to the next day
+    startDate = dayjs(startDate).add(1, "d")
+    document.getElementById("startDateEl").value = dayjs(startDate).format("YYYY-MM-DD")
 
-    totalHoursEl.textContent = Math.round(hours / (1000 * 60 * 60) * 100) / 100 + " h (" + Math.round(eveningHours / (1000 * 60 * 60) * 100) / 100 + " evening hours)"
+    //render total hours
+    totalHoursEl.textContent = `${(Math.round(hours * 100) / 100).toFixed(2)} h (${(Math.round(eveningHours * 100) / 100).toFixed(2)} evening hours)`
 }
 
-//Listen for input fields
-endHourEl.addEventListener("input", () => {
-    getValues()
-    document.getElementById("calculation").textContent = renderHours
-})
-document.getElementById("startHourEl").addEventListener("input", () => {
-    getValues()
-    document.getElementById("calculation").textContent = renderHours
-})
+//listen for changes
+document.getElementById("startDateEl").addEventListener("input", getValues)
+document.getElementById("startHourEl").addEventListener("input", getValues)
+document.getElementById("endHourEl").addEventListener("input", getValues)
 
-//listen for enter {
+//listen for click & enter {
+button.addEventListener("click", checkDate)
+
 endHourEl.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
-        calculateHours()
+        checkDate()
     }
 })
 
-//There's plenty of stuff in this single JS file. Should we break it down to pieces like we did with React applications? How do we do that with JS?
+
+//Get values from input fields
+window.onload = () => {
+    getValues()
+}

@@ -19,7 +19,7 @@
             <input id="startHourEl" type="time">
             <h2>Ended</h2>
             <input id="endHourEl" type="time">
-            <button id="submitButton" class="button submitButton" onclick="calculateHours()">Submit</button>
+            <button id="submitButton" class="button submitButton">Submit</button>
             <h3>This shift hours:</h3>
             <div id="calculation"></div>
             <h3>All hours total:</h3>
@@ -31,6 +31,8 @@
         </div>
     </div>
     <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script src="./node_modules/dayjs/plugin/dayOfYear.js"></script>
+    <script src="todo.js"></script>
     <script src="index.js"></script>
 </body>
 
