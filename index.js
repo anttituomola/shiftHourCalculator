@@ -61,10 +61,14 @@ function countEveningHours() {
     }
 }
 
+//TODO: add sunday hours counter
+
+//TODO: fetch Finnish calendar via API to get national holidays
+
 function updateHours() {
     countEveningHours()
     //fix this: remove formatting from class element
-    let todoEl = new Todo(startDate.format("DD.MM.YYYY"), startHour, endHour, shiftHour, shiftEveningHour)
+    let todoEl = new Todo(startDate, startHour, endHour, shiftHour, shiftEveningHour)
     shifts.push(todoEl)
     sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
 
@@ -93,7 +97,7 @@ function render() {
         //TODO: add weekday
         shiftList.innerHTML += `
         <div class="aShitf">
-        ${sortedShifts[i].startDate}: ${(Math.round(sortedShifts[i].shiftHour * 100) / 100).toFixed(2)} h (${(Math.round(sortedShifts[i].shiftEveningHour * 100) / 100).toFixed(2)} evening hours)
+        <b>${sortedShifts[i].startDate.format("dddd DD.MM.YYYY")}:</b> ${(Math.round(sortedShifts[i].shiftHour * 100) / 100).toFixed(2)} h (${(Math.round(sortedShifts[i].shiftEveningHour * 100) / 100).toFixed(2)} evening hours)
         <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
     }
     //update date selector to the next day
