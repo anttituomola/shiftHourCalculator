@@ -1,22 +1,26 @@
-dayjs.extend(window.dayjs_plugin_weekday)
-dayjs.extend(window.dayjs_plugin_dayOfYear)
+dayjs.extend(dayjs_plugin_weekday)
+dayjs.extend(dayjs_plugin_dayOfYear)
+
+//import Todo from "./todo.js";
+
+const blah = new Todo();
 
 let shifts = []
 let hours = 0
 let eveningHours = 0
 let shiftEveningHours = 0
+let shiftHour = 0
 
 //global variables
-let startDate = dayjs().hour(00).minute(00).format()
-let startHour = dayjs(startDate).hour(12).minute(00)
+let startDate = dayjs().hour(0).minute(0).format()
+let startHour = dayjs(startDate).hour(12).minute(0)
 let endHour = dayjs(startDate).hour(19).minute(30)
-let shiftHour = 0
 let button = document.getElementById("submitButton")
 let sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
 
 
 //input field placeholder values
-document.getElementById("startDateEl").value = dayjs(startDate).format("YYYY-MM-DD") //why does this shows in local format on the app (DD/MM/YYYY)
+document.getElementById("startDateEl").value = dayjs(startDate).format("YYYY-MM-DD")
 document.getElementById("startHourEl").value = dayjs(startHour).format("HH:mm")
 document.getElementById("endHourEl").value = dayjs(endHour).format("HH:mm")
 
@@ -55,15 +59,10 @@ function countEveningHours() {
     let eveningStarts = dayjs(startDate).hour(18)
     if (dayjs(startHour).isAfter(eveningStarts)) {
         shiftEveningHour = endHour.diff(startHour, "hour", true)
-    }
-    else {
+    } else {
         shiftEveningHour = endHour.diff(eveningStarts, "hour", true)
     }
 }
-
-//TODO: add sunday hours counter
-
-//TODO: fetch Finnish calendar via API to get national holidays
 
 function updateHours() {
     countEveningHours()
@@ -94,8 +93,9 @@ function render() {
     let totalHoursEl = document.getElementById("calculationTotal")
     shiftList.textContent = ""
     for (let i = 0; i < sortedShifts.length; i++) {
-        //TODO: add weekday
-        shiftList.innerHTML += `
+        shiftList.innerHTML += 
+        //TODO: instead of a float, render hours and minutes
+        `
         <div class="aShitf">
         <b>${sortedShifts[i].startDate.format("dddd DD.MM.YYYY")}:</b> ${(Math.round(sortedShifts[i].shiftHour * 100) / 100).toFixed(2)} h (${(Math.round(sortedShifts[i].shiftEveningHour * 100) / 100).toFixed(2)} evening hours)
         <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
@@ -122,8 +122,19 @@ endHourEl.addEventListener("keypress", (event) => {
     }
 })
 
-
 //Get values from input fields
 window.onload = () => {
     getValues()
 }
+
+    //TODO: What if the shift continues over midnight? (idea: if endHour < Starthour => add(1, "day"))
+
+    //TODO: add sunday hours counter
+
+    //TODO: fetch Finnish calendar via API to get national holidays: https://holidayapi.com/countries/fi/2021
+
+    //TODO: sort shifts under months?
+
+    //TODO: add "send this month" option to sent the shift list via email
+
+    // splitting code up, using ES6 modules
