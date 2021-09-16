@@ -1,14 +1,12 @@
 dayjs.extend(dayjs_plugin_weekday)
 dayjs.extend(dayjs_plugin_dayOfYear)
 
-//import Todo from "./todo.js";
-
-const blah = new Todo();
+import Todo from "./todo.js";
 
 let shifts = []
 let hours = 0
 let eveningHours = 0
-let shiftEveningHours = 0
+let shiftEveningHour = 0
 let shiftHour = 0
 
 //global variables
@@ -33,6 +31,9 @@ function getValues() {
     startDate = dayjs(document.getElementById("startDateEl").value)
     startHour = dayjs(startDate).hour(startHourValue[0]).minute(startHourValue[1])
     endHour = dayjs(startDate).hour(endHourValue[0]).minute(endHourValue[1])
+    if(dayjs(endHour).isBefore(dayjs(startHour))) {
+        console.log("it's night shift, how do I do this?")
+    }
     shiftHour = dayjs(endHour).diff(startHour, "h", true)
     document.getElementById("calculation").textContent = (Math.round(shiftHour * 100) / 100).toFixed(2)
 }

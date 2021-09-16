@@ -1,4 +1,4 @@
-class Todo {
+export default class Todo {
     constructor(startDate, startHour, endHour, shiftHour, shiftEveningHour) {
         this.startDate = startDate
         this.startHour = startHour
@@ -7,4 +7,3 @@ class Todo {
         this.shiftEveningHour = shiftEveningHour
     }
 }
-//export default 
