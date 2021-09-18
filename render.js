@@ -1,4 +1,6 @@
-import { sortedShifts, startDate, hours, eveningHours, nightHours } from "./index.js"
+import { sortedShifts } from "./index.js"
+import { hours, eveningHours, nightHours } from "./updateHours.js"
+import { startDate } from "./getValues.js"
 
 export function render() {
     let shiftList = document.getElementById("shift-list")
@@ -19,5 +21,5 @@ export function render() {
     document.getElementById("startDateEl").value = dayjs(startDateRender).format("YYYY-MM-DD")
 
     //render total hours
-    totalHoursEl.textContent = `${(Math.round(hours * 100) / 100).toFixed(2)} h (${(Math.round(eveningHours * 100) / 100).toFixed(2)} evening hours + ${nightHours} night hours)`
+    totalHoursEl.textContent = `${(Math.round(hours * 100) / 100).toFixed(2)} h (${(Math.round(eveningHours * 100) / 100).toFixed(2)} evening hours + ${(Math.round(nightHours * 100) / 100).toFixed(2)} night hours)`
 }

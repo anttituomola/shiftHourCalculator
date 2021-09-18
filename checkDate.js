@@ -1,4 +1,7 @@
-import { getValues, startDate, shifts, updateHours } from "./index.js"
+import { shifts } from "./index.js"
+import { updateHours } from "./updateHours.js"
+import { getValues } from "./getValues.js"
+import { startDate } from "./getValues.js"
 
 //check if date already submitted
 export function checkDate() {
@@ -10,6 +13,10 @@ export function checkDate() {
         if (thatDate === thisDate) {
             found = true
             alert("This date already submitted!")
+            //update date selector to the newest, not reported day
+            let lastDate = dayjs(shifts[0].startDate)
+            let startDateRender = dayjs(lastDate).add(1, "d")
+            document.getElementById("startDateEl").value = dayjs(startDateRender).format("YYYY-MM-DD")
             break
         }
     }
