@@ -8,8 +8,10 @@ export function countEveningHours() {
     let eveningStarts = dayjs(startDate).hour(18)
     if (dayjs(startHour).isAfter(eveningStarts)) {
         shiftEveningHour = endHour.diff(startHour, "hour", true)
-    } else {
+    } else if (dayjs(endHour).isAfter(eveningStarts)) {
         shiftEveningHour = endHour.diff(eveningStarts, "hour", true)
+    } else {
+        shiftEveningHour = 0
     }
     //night hours
     if (dayjs(endHour).isAfter(dayjs(startDate), "day")) {
