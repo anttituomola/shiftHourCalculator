@@ -1,4 +1,4 @@
-import { hours, eveningHours, nightHours, sortedShifts } from "./updateHours.js"
+import { hours, eveningHours, nightHours, sortedShifts, sundayHours} from "./updateHours.js"
 import { startDate } from "./getValues.js"
 import { holidayHour } from "./countHolidayHours.js"
 
@@ -22,10 +22,11 @@ export function render() {
 
     //render total hours
     totalHoursEl.innerHTML = `
-    <div class="totalHours"><b>${(Math.round(hours * 100) / 100).toFixed(2)} hours total</b></div><br>
-
+    <b><h3>Total: ${(Math.round(hours * 100) / 100).toFixed(2)} hours</h3></b>
     Includes:
-    <div class="extraHours">${(Math.round(eveningHours * 100) / 100).toFixed(2)} evening hours<br>
-
-    ${(Math.round(nightHours * 100) / 100).toFixed(2)} night hours`
+    <ul id="totalHoursList">
+        <li>${(Math.round(eveningHours * 100) / 100).toFixed(2)} evening hours</li>
+        <li>${(Math.round(nightHours * 100) / 100).toFixed(2)} night hours<br></li>
+        <li>${(Math.round(sundayHours * 100) / 100).toFixed(2)} holiday hours</li>
+    `
 }

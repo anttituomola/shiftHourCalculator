@@ -34,6 +34,9 @@ export function updateHours() {
     for (let i = 0; i < shifts.length; i++) {
         nightHours += shifts[i].shiftNightHour
     }
-    
+    sundayHours = 0
+    for(let i = 0; i < shifts.length; i++) {
+        sundayHours += shifts[i].holidayHour
+    }
     render()
 }

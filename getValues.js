@@ -17,5 +17,5 @@ export function getValues() {
         endHour = dayjs(endHour).add(1, "day")
     }
     shiftHour = dayjs(endHour).diff(startHour, "h", true)
-    document.getElementById("calculation").textContent = (Math.round(shiftHour * 100) / 100).toFixed(2)
+    document.getElementById("calculation").innerHTML = `<h3>This shift: ${(Math.round(shiftHour * 100) / 100).toFixed(2)}</h3>`
 }
