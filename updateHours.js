@@ -4,16 +4,20 @@ import { shifts } from "./index.js"
 import { render } from "./render.js"
 import { startDate } from "./getValues.js"
 import { startHour, endHour, shiftHour } from "./getValues.js"
+import { sundayHourCalc } from "./countHolidayHours.js"
+import { holidayHour } from "./countHolidayHours.js"
 
 export let hours = 0
 export let eveningHours = 0
 export let nightHours = 0
 export let sortedShifts
+export let sundayHours = 0
 
 
 export function updateHours() {
     countEveningHours()
-    let todoEl = new Todo(startDate, startHour, endHour, shiftHour, shiftEveningHour, shiftNightHour)
+    sundayHourCalc()
+    let todoEl = new Todo(startDate, startHour, endHour, shiftHour, shiftEveningHour, shiftNightHour, holidayHour)
     shifts.push(todoEl)
     sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
 
@@ -30,5 +34,6 @@ export function updateHours() {
     for (let i = 0; i < shifts.length; i++) {
         nightHours += shifts[i].shiftNightHour
     }
+    
     render()
 }

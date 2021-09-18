@@ -58,3 +58,6 @@ window.onload = () => {
 //DONE:
 //TODO: What if the shift continues over midnight? (idea: if endHour < Starthour => add(1, "day"))
 // splitting code up, using ES6 modules
+
+//QUESTIONS:
+// why does "import dayjs from "dayjs" keeps getting created automatically to my files?
