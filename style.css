@@ -58,6 +58,10 @@ body {
     padding: 0.25em;
 }
 
+.holiday {
+    color: red;
+}
+
 #startDateEl {
     display: block;
 }
