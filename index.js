@@ -97,11 +97,6 @@ function updateHours() {
     render()
 }
 
-function deleteButtonHandler(i) {
-    shifts.splice(i, 1)
-    render()
-}
-
 function render() {
     let shiftList = document.getElementById("shift-list")
     let totalHoursEl = document.getElementById("calculationTotal")
@@ -111,8 +106,10 @@ function render() {
             //TODO: instead of a float, render hours and minutes
             `
         <div class="aShitf">
-        <b>${sortedShifts[i].startDate.format("dddd DD.MM.YYYY")}:</b> ${(Math.round(sortedShifts[i].shiftHour * 100) / 100).toFixed(2)} h (${(Math.round(sortedShifts[i].shiftEveningHour * 100) / 100).toFixed(2)} evening hours)
-        <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
+        <b>${sortedShifts[i].startDate.format("dddd DD.MM.YYYY")}:</b> ${(Math.round(sortedShifts[i].shiftHour * 100) / 100).toFixed(2)} h 
+        (${(Math.round(sortedShifts[i].shiftEveningHour * 100) / 100).toFixed(2)} evening hours)
+        <button id="${i}" class="deleteButton button">DELETE</button>
+        </div>`
     }
     //update date selector to the next day
     startDate = dayjs(startDate).add(1, "d")
@@ -120,6 +117,18 @@ function render() {
 
     //render total hours
     totalHoursEl.textContent = `${(Math.round(hours * 100) / 100).toFixed(2)} h (${(Math.round(eveningHours * 100) / 100).toFixed(2)} evening hours + ${nightHours} night hours)`
+}
+
+document.getElementById("shift-list").addEventListener("click", e => {
+    while(e.target != null){
+        if(e.target.classList.contains("deleteButton")) {deleteButtonHandler(e.target.id)}
+        break
+    }
+})
+
+function deleteButtonHandler(id) {  
+    shifts.splice(id, 1)
+        render()
 }
 
 //listen for changes
@@ -141,16 +150,18 @@ window.onload = () => {
     getValues()
 }
 
-    //TODO: What if the shift continues over midnight? (idea: if endHour < Starthour => add(1, "day"))
 
-    //TODO: add sunday hours counter
+//TODO: add sunday hours counter
 
-    //TODO: fetch Finnish calendar via API to get national holidays: https://holidayapi.com/countries/fi/2021
+//TODO: fetch Finnish calendar via API to get national holidays: https://holidayapi.com/countries/fi/2021
 
-    //TODO: sort shifts under months?
+//TODO: sort shifts under months?
 
-    //TODO: add "send this month" option to sent the shift list via email
+//TODO: add "send this month" option to sent the shift list via email
 
-    // splitting code up, using ES6 modules
+// splitting code up, using ES6 modules
 
-    // TODO: prevent reporting of future dates
+// TODO: prevent reporting of future dates
+
+//TODO: What if the shift continues over midnight? (idea: if endHour < Starthour => add(1, "day"))
+    //DONE:
