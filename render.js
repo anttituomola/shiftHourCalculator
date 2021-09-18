@@ -1,4 +1,4 @@
-import { sortedShifts } from "./index.js"
+import { sortedShifts } from "./updateHours.js"
 import { hours, eveningHours, nightHours } from "./updateHours.js"
 import { startDate } from "./getValues.js"
 

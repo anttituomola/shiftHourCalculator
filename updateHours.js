@@ -8,12 +8,14 @@ import { startHour, endHour, shiftHour } from "./getValues.js"
 export let hours = 0
 export let eveningHours = 0
 export let nightHours = 0
+export let sortedShifts
 
 
 export function updateHours() {
     countEveningHours()
     let todoEl = new Todo(startDate, startHour, endHour, shiftHour, shiftEveningHour, shiftNightHour)
     shifts.push(todoEl)
+    sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
 
     //Update total hours count
     hours = 0

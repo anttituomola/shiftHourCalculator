@@ -11,8 +11,6 @@ import { startDate, startHour, endHour } from "./getValues.js";
 //global variables
 export let shifts = []
 let button = document.getElementById("submitButton")
-export let sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
-
 
 //input field placeholder values
 document.getElementById("startDateEl").value = dayjs(startDate).format("YYYY-MM-DD")
