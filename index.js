@@ -1,5 +1,6 @@
 dayjs.extend(dayjs_plugin_weekday)
 dayjs.extend(dayjs_plugin_dayOfYear)
+dayjs.extend(dayjs_plugin_duration)
 
 import Todo from "./todo.js";
 
@@ -7,6 +8,8 @@ let shifts = []
 let hours = 0
 let eveningHours = 0
 let shiftEveningHour = 0
+let shiftNightHour = 0
+let nightHours = 0
 let shiftHour = 0
 
 //global variables
@@ -31,8 +34,8 @@ function getValues() {
     startDate = dayjs(document.getElementById("startDateEl").value)
     startHour = dayjs(startDate).hour(startHourValue[0]).minute(startHourValue[1])
     endHour = dayjs(startDate).hour(endHourValue[0]).minute(endHourValue[1])
-    if(dayjs(endHour).isBefore(dayjs(startHour))) {
-        console.log("it's night shift, how do I do this?")
+    if (dayjs(endHour).isBefore(dayjs(startHour))) {
+        endHour = dayjs(endHour).add(1, "day")
     }
     shiftHour = dayjs(endHour).diff(startHour, "h", true)
     document.getElementById("calculation").textContent = (Math.round(shiftHour * 100) / 100).toFixed(2)
@@ -63,12 +66,18 @@ function countEveningHours() {
     } else {
         shiftEveningHour = endHour.diff(eveningStarts, "hour", true)
     }
+    //night hours
+    if (dayjs(endHour).isAfter(dayjs(startDate), "day")) {
+        let shiftNightStarts = dayjs(endHour).hour(0).minute(0)
+        let nightShiftEnds = dayjs(endHour)
+        shiftNightHour = nightShiftEnds.diff(shiftNightStarts, "hour", true)
+    }
 }
 
 function updateHours() {
     countEveningHours()
     //fix this: remove formatting from class element
-    let todoEl = new Todo(startDate, startHour, endHour, shiftHour, shiftEveningHour)
+    let todoEl = new Todo(startDate, startHour, endHour, shiftHour, shiftEveningHour, shiftNightHour)
     shifts.push(todoEl)
     sortedShifts = shifts.sort((a, b) => b.startHour - a.startHour)
 
@@ -80,6 +89,10 @@ function updateHours() {
     eveningHours = 0
     for (let i = 0; i < shifts.length; i++) {
         eveningHours += shifts[i].shiftEveningHour
+    }
+    nightHours = 0
+    for (let i = 0; i < shifts.length; i++) {
+        nightHours += shifts[i].shiftNightHour
     }
     render()
 }
@@ -94,9 +107,9 @@ function render() {
     let totalHoursEl = document.getElementById("calculationTotal")
     shiftList.textContent = ""
     for (let i = 0; i < sortedShifts.length; i++) {
-        shiftList.innerHTML += 
-        //TODO: instead of a float, render hours and minutes
-        `
+        shiftList.innerHTML +=
+            //TODO: instead of a float, render hours and minutes
+            `
         <div class="aShitf">
         <b>${sortedShifts[i].startDate.format("dddd DD.MM.YYYY")}:</b> ${(Math.round(sortedShifts[i].shiftHour * 100) / 100).toFixed(2)} h (${(Math.round(sortedShifts[i].shiftEveningHour * 100) / 100).toFixed(2)} evening hours)
         <button class="deleteButton button" onclick="deleteButtonHandler(${i})">DELETE</button></div>`
@@ -106,7 +119,7 @@ function render() {
     document.getElementById("startDateEl").value = dayjs(startDate).format("YYYY-MM-DD")
 
     //render total hours
-    totalHoursEl.textContent = `${(Math.round(hours * 100) / 100).toFixed(2)} h (${(Math.round(eveningHours * 100) / 100).toFixed(2)} evening hours)`
+    totalHoursEl.textContent = `${(Math.round(hours * 100) / 100).toFixed(2)} h (${(Math.round(eveningHours * 100) / 100).toFixed(2)} evening hours + ${nightHours} night hours)`
 }
 
 //listen for changes
@@ -139,3 +152,5 @@ window.onload = () => {
     //TODO: add "send this month" option to sent the shift list via email
 
     // splitting code up, using ES6 modules
+
+    // TODO: prevent reporting of future dates
