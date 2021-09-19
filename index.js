@@ -47,13 +47,7 @@ window.onload = () => {
 
 //TODO: fetch Finnish calendar via API to get national holidays: https://holidayapi.com/countries/fi/2021
 
-//TODO: sort shifts under months?
-
 //TODO: add "send this month" option to sent the shift list via email
-
-// TODO: prevent reporting of future dates
-
-//TODO: make render more readable
 
 //TODO: fix night hour calculator: if goes over 6am
 
@@ -62,6 +56,7 @@ window.onload = () => {
 //TODO: What if the shift continues over midnight? (idea: if endHour < Starthour => add(1, "day"))
 // splitting code up, using ES6 modules
 //TODO: add sunday hours counter
+//TODO: make render more readable
 
 //QUESTIONS:
 // why does "import dayjs from "dayjs" keeps getting created automatically to my files?

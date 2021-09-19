@@ -21,3 +21,13 @@ export function sundayHourCalc() {
     }
     holidayHour = sundayShift
 }
+
+/* fetch("https://holidayapi.com/countries/fi/2021").then(response => response.json()).then(data => console.log(data))
+
+import { HolidayAPI } from 'holidayapi';
+const key = '4d92456e-8799-4c2d-b427-4a6f893bc480'
+const holidayApi = new HolidayAPI({ key });
+holidayApi.holidays({
+  country: 'FI',
+  year: '2021',
+}); */
