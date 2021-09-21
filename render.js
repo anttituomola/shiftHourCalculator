@@ -1,6 +1,5 @@
 import { hours, eveningHours, nightHours, sortedShifts, sundayHours} from "./updateHours.js"
 import { startDate } from "./getValues.js"
-import { holidayHour } from "./countHolidayHours.js"
 
 export function render() {
     let shiftList = document.getElementById("shift-list")

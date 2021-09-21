@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "dayjs": "^1.10.7"
+    "dayjs": "^1.10.7",
+    "jspdf": "^2.4.0"
   },
   "devDependencies": {},
   "scripts": {
