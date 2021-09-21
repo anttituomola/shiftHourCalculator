@@ -27,9 +27,12 @@ export function countEveningHours() {
         let shiftNightStarts = dayjs(endHour).hour(0).minute(0)
         let nightEnds = dayjs(endHour).hour(6).minute(0)
         let nightShiftEnds = dayjs(endHour)
+        //if shift ends before 6am
         if (dayjs(endHour).isAfter(nightEnds)) {
             shiftNightHour = nightEnds.diff(shiftNightStarts, "hour", true)
+        } else if (dayjs(endHour).isBefore(dayjs(nightEnds))) {
+        //if shift ends after 6am
+            shiftNightHour = nightShiftEnds.diff(shiftNightStarts, "hour", true)
         }
-        shiftNightHour = nightShiftEnds.diff(shiftNightStarts, "hour", true)
     }
 }
