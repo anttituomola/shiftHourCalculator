@@ -7,7 +7,9 @@ export function createPDF() {
     let pdfMaterial = shifts.map(function(item) {
         return item["shiftHour"]
     })
-    /* doc.text(pdfMaterial)
-    doc.save("a4.pdf")   */  
-    console.log(pdfMaterial)
+    
+    let pdfString = pdfMaterial.toString()
+    doc.text(pdfString, 10, 10)
+    doc.save("a4.pdf") 
+    console.log(doc )
 }
