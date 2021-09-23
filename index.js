@@ -47,10 +47,7 @@ window.onload = () => {
 
 
 //TODO: fetch Finnish calendar via API to get national holidays: https://holidayapi.com/countries/fi/2021
-
 //TODO: add "send this month" option to sent the shift list via email
-
-
 
 //DONE:
 //TODO: What if the shift continues over midnight? (idea: if endHour < Starthour => add(1, "day"))
@@ -58,6 +55,3 @@ window.onload = () => {
 //TODO: add sunday hours counter
 //TODO: make render more readable
 //TODO: fix night hour calculator: if goes over 6am
-
-//QUESTIONS:
-// why does "import dayjs from "dayjs" keeps getting created automatically to my files?

@@ -33,6 +33,8 @@ export function countEveningHours() {
         } else if (dayjs(endHour).isBefore(dayjs(nightEnds))) {
         //if shift ends after 6am
             shiftNightHour = nightShiftEnds.diff(shiftNightStarts, "hour", true)
-        }
+        } /* else if (dayjs(startHour).isBefore) */
+        //if shift starts before 6am
+
     }
 }
